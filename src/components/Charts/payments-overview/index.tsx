@@ -24,7 +24,7 @@ export async function PaymentsOverview({
     >
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h2 className="text-body-2xlg font-bold text-dark dark:text-white">
-          Payments Overview
+          收款概览
         </h2>
 
         <PeriodPicker defaultValue={timeFrame} sectionKey="payments_overview" />
@@ -37,14 +37,14 @@ export async function PaymentsOverview({
           <dt className="text-xl font-bold text-dark dark:text-white">
             ${standardFormat(data.received.reduce((acc, { y }) => acc + y, 0))}
           </dt>
-          <dd className="font-medium dark:text-dark-6">Received Amount</dd>
+          <dd className="font-medium dark:text-dark-6">已收金额</dd>
         </div>
 
         <div>
           <dt className="text-xl font-bold text-dark dark:text-white">
             ${standardFormat(data.due.reduce((acc, { y }) => acc + y, 0))}
           </dt>
-          <dd className="font-medium dark:text-dark-6">Due Amount</dd>
+          <dd className="font-medium dark:text-dark-6">待收金额</dd>
         </div>
       </dl>
     </div>

@@ -2,61 +2,61 @@ import * as Icons from "../icons";
 
 export const NAV_DATA = [
   {
-    label: "MAIN MENU",
+    label: "主菜单",
     items: [
       {
-        title: "Dashboard",
+        title: "仪表盘",
         icon: Icons.HomeIcon,
         items: [
           {
-            title: "eCommerce",
+            title: "电商概览",
             url: "/",
           },
         ],
       },
       {
-        title: "Calendar",
+        title: "日历",
         url: "/calendar",
         icon: Icons.Calendar,
         items: [],
       },
       {
-        title: "Profile",
+        title: "个人资料",
         url: "/profile",
         icon: Icons.User,
         items: [],
       },
       {
-        title: "Forms",
+        title: "表单",
         icon: Icons.Alphabet,
         items: [
           {
-            title: "Form Elements",
+            title: "表单元素",
             url: "/forms/form-elements",
           },
           {
-            title: "Form Layout",
+            title: "表单布局",
             url: "/forms/form-layout",
           },
         ],
       },
       {
-        title: "Tables",
+        title: "表格",
         url: "/tables",
         icon: Icons.Table,
         items: [
           {
-            title: "Tables",
+            title: "表格列表",
             url: "/tables",
           },
         ],
       },
       {
-        title: "Pages",
+        title: "页面",
         icon: Icons.Alphabet,
         items: [
           {
-            title: "Settings",
+            title: "设置",
             url: "/pages/settings",
           },
         ],
@@ -64,38 +64,38 @@ export const NAV_DATA = [
     ],
   },
   {
-    label: "OTHERS",
+    label: "其他",
     items: [
       {
-        title: "Charts",
+        title: "图表",
         icon: Icons.PieChart,
         items: [
           {
-            title: "Basic Chart",
+            title: "基础图表",
             url: "/charts/basic-chart",
           },
         ],
       },
       {
-        title: "UI Elements",
+        title: "界面元素",
         icon: Icons.FourCircle,
         items: [
           {
-            title: "Alerts",
+            title: "提示框",
             url: "/ui-elements/alerts",
           },
           {
-            title: "Buttons",
+            title: "按钮",
             url: "/ui-elements/buttons",
           },
         ],
       },
       {
-        title: "Authentication",
+        title: "身份认证",
         icon: Icons.Authentication,
         items: [
           {
-            title: "Sign In",
+            title: "登录",
             url: "/auth/sign-in",
           },
         ],

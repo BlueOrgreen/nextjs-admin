@@ -36,9 +36,9 @@ export default function SigninWithPassword() {
     <form onSubmit={handleSubmit}>
       <InputGroup
         type="email"
-        label="Email"
+        label="邮箱"
         className="mb-4 [&_input]:py-[15px]"
-        placeholder="Enter your email"
+        placeholder="请输入邮箱"
         name="email"
         handleChange={handleChange}
         value={data.email}
@@ -47,9 +47,9 @@ export default function SigninWithPassword() {
 
       <InputGroup
         type="password"
-        label="Password"
+        label="密码"
         className="mb-5 [&_input]:py-[15px]"
-        placeholder="Enter your password"
+        placeholder="请输入密码"
         name="password"
         handleChange={handleChange}
         value={data.password}
@@ -58,7 +58,7 @@ export default function SigninWithPassword() {
 
       <div className="mb-6 flex items-center justify-between gap-2 py-2 font-medium">
         <Checkbox
-          label="Remember me"
+          label="记住我"
           name="remember"
           withIcon="check"
           minimal
@@ -75,7 +75,7 @@ export default function SigninWithPassword() {
           href="/auth/forgot-password"
           className="hover:text-primary dark:text-white dark:hover:text-primary"
         >
-          Forgot Password?
+          忘记密码?
         </Link>
       </div>
 
@@ -84,7 +84,7 @@ export default function SigninWithPassword() {
           type="submit"
           className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary p-4 font-medium text-white transition hover:bg-opacity-90"
         >
-          Sign In
+          登陆
           {loading && (
             <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent dark:border-primary dark:border-t-transparent" />
           )}

@@ -10,6 +10,7 @@ type PropsType = {
 
 export async function WeeksProfit({ className, timeFrame }: PropsType) {
   const data = await getWeeksProfitData(timeFrame);
+  const timeFrameLabel = timeFrame === "last week" ? "上周" : "本周";
 
   return (
     <div
@@ -20,7 +21,7 @@ export async function WeeksProfit({ className, timeFrame }: PropsType) {
     >
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h2 className="text-body-2xlg font-bold text-dark dark:text-white">
-          Profit {timeFrame || "this week"}
+          {timeFrameLabel}利润
         </h2>
 
         <PeriodPicker

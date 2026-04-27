@@ -22,17 +22,17 @@ export async function TopChannels({ className }: { className?: string }) {
       )}
     >
       <h2 className="mb-4 text-body-2xlg font-bold text-dark dark:text-white">
-        Top Channels
+        热门渠道
       </h2>
 
       <Table>
         <TableHeader>
           <TableRow className="border-none uppercase [&>th]:text-center">
-            <TableHead className="min-w-[120px] !text-left">Source</TableHead>
-            <TableHead>Visitors</TableHead>
-            <TableHead className="!text-right">Revenues</TableHead>
-            <TableHead>Sales</TableHead>
-            <TableHead>Conversion</TableHead>
+            <TableHead className="min-w-[120px] !text-left">来源</TableHead>
+            <TableHead>访问量</TableHead>
+            <TableHead className="!text-right">收入</TableHead>
+            <TableHead>销量</TableHead>
+            <TableHead>转化率</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -48,7 +48,7 @@ export async function TopChannels({ className }: { className?: string }) {
                   className="size-8 rounded-full object-cover"
                   width={40}
                   height={40}
-                  alt={channel.name + " Logo"}
+                  alt={channel.name + " 标志"}
                   role="presentation"
                 />
                 <div className="">{channel.name}</div>

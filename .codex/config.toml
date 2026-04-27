@@ -1,0 +1,15 @@
+[mcp_servers.user_api]
+command = "npx"
+args = [
+  "-y",
+  "apifox-mcp-server@latest",
+  "--oas=http://localhost:3001/docs-json"
+]
+
+[mcp_servers.order_api]
+command = "npx"
+args = [
+  "-y",
+  "apifox-mcp-server@latest",
+  "--oas=http://localhost:3002/docs-json"
+]

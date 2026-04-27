@@ -16,21 +16,21 @@ export function UserInfo() {
   const [isOpen, setIsOpen] = useState(false);
 
   const USER = {
-    name: "John Smith",
-    email: "johnson@nextadmin.com",
+    name: "张明",
+    email: "zhangming@qq.com",
     img: "/images/user/user-03.png",
   };
 
   return (
     <Dropdown isOpen={isOpen} setIsOpen={setIsOpen}>
       <DropdownTrigger className="rounded align-middle outline-none ring-primary ring-offset-2 focus-visible:ring-1 dark:ring-offset-gray-dark">
-        <span className="sr-only">My Account</span>
+        <span className="sr-only">我的账户</span>
 
         <figure className="flex items-center gap-3">
           <Image
             src={USER.img}
             className="size-12"
-            alt={`Avatar of ${USER.name}`}
+            alt={`${USER.name}的头像`}
             role="presentation"
             width={200}
             height={200}
@@ -54,13 +54,13 @@ export function UserInfo() {
         className="border border-stroke bg-white shadow-md dark:border-dark-3 dark:bg-gray-dark min-[230px]:min-w-[17.5rem]"
         align="end"
       >
-        <h2 className="sr-only">User information</h2>
+        <h2 className="sr-only">用户信息</h2>
 
         <figure className="flex items-center gap-2.5 px-5 py-3.5">
           <Image
             src={USER.img}
             className="size-12"
-            alt={`Avatar for ${USER.name}`}
+            alt={`${USER.name}的头像`}
             role="presentation"
             width={200}
             height={200}
@@ -85,7 +85,7 @@ export function UserInfo() {
           >
             <UserIcon />
 
-            <span className="mr-auto text-base font-medium">View profile</span>
+            <span className="mr-auto text-base font-medium">查看资料</span>
           </Link>
 
           <Link
@@ -95,9 +95,7 @@ export function UserInfo() {
           >
             <SettingsIcon />
 
-            <span className="mr-auto text-base font-medium">
-              Account Settings
-            </span>
+            <span className="mr-auto text-base font-medium">账户设置</span>
           </Link>
         </div>
 
@@ -110,7 +108,7 @@ export function UserInfo() {
           >
             <LogOutIcon />
 
-            <span className="text-base font-medium">Log out</span>
+            <span className="text-base font-medium">退出登录</span>
           </button>
         </div>
       </DropdownContent>

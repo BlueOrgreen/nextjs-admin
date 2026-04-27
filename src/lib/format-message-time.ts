@@ -9,33 +9,33 @@ export function formatMessageTime(timestamp: string) {
 
   // For messages from today, show time
   if (diffInDays === 0) {
-    // If less than 60 minutes ago, show "X min"
+    // If less than 60 minutes ago, show "X分钟前"
     if (diffInMinutes < 60) {
-      return diffInMinutes === 0 ? "just now" : `${diffInMinutes}m`;
+      return diffInMinutes === 0 ? "刚刚" : `${diffInMinutes}分钟前`;
     }
-    // Otherwise show time like "4:39 PM"
-    return messageDate.toLocaleTimeString("en-US", {
-      hour: "numeric",
+    // Otherwise show time like "16:39"
+    return messageDate.toLocaleTimeString("zh-CN", {
+      hour: "2-digit",
       minute: "2-digit",
-      hour12: true,
+      hour12: false,
     });
   }
 
   // For messages from this week, show day name
   if (diffInDays < 7) {
-    return messageDate.toLocaleDateString("en-US", { weekday: "long" });
+    return messageDate.toLocaleDateString("zh-CN", { weekday: "short" });
   }
 
   // For messages from this year, show date
   if (messageDate.getFullYear() === now.getFullYear()) {
-    return messageDate.toLocaleDateString("en-US", {
+    return messageDate.toLocaleDateString("zh-CN", {
       day: "numeric",
       month: "short",
     });
   }
 
   // For older messages, show date with year
-  return messageDate.toLocaleDateString("en-US", {
+  return messageDate.toLocaleDateString("zh-CN", {
     day: "numeric",
     month: "short",
     year: "numeric",

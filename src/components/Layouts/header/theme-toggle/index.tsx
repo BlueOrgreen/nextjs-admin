@@ -32,7 +32,7 @@ export function ThemeToggleSwitch() {
       className="group rounded-full bg-gray-3 p-[5px] text-[#111928] outline-1 outline-primary focus-visible:outline dark:bg-[#020D1A] dark:text-current"
     >
       <span className="sr-only">
-        Switch to {theme === "light" ? "dark" : "light"} mode
+        切换到{theme === "light" ? "深色" : "浅色"}模式
       </span>
 
       <span aria-hidden className="relative flex gap-2.5">

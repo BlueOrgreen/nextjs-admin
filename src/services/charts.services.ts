@@ -6,22 +6,22 @@ export async function getDevicesUsedData(
 
   const data = [
     {
-      name: "Desktop",
+      name: "桌面端",
       percentage: 0.65,
       amount: 1625,
     },
     {
-      name: "Tablet",
+      name: "平板",
       percentage: 0.1,
       amount: 250,
     },
     {
-      name: "Mobile",
+      name: "移动端",
       percentage: 0.2,
       amount: 500,
     },
     {
-      name: "Unknown",
+      name: "未知",
       percentage: 0.05,
       amount: 125,
     },
@@ -62,37 +62,37 @@ export async function getPaymentsOverviewData(
     };
   }
 
-  return {
-    received: [
-      { x: "Jan", y: 0 },
-      { x: "Feb", y: 20 },
-      { x: "Mar", y: 35 },
-      { x: "Apr", y: 45 },
-      { x: "May", y: 35 },
-      { x: "Jun", y: 55 },
-      { x: "Jul", y: 65 },
-      { x: "Aug", y: 50 },
-      { x: "Sep", y: 65 },
-      { x: "Oct", y: 75 },
-      { x: "Nov", y: 60 },
-      { x: "Dec", y: 75 },
-    ],
-    due: [
-      { x: "Jan", y: 15 },
-      { x: "Feb", y: 9 },
-      { x: "Mar", y: 17 },
-      { x: "Apr", y: 32 },
-      { x: "May", y: 25 },
-      { x: "Jun", y: 68 },
-      { x: "Jul", y: 80 },
-      { x: "Aug", y: 68 },
-      { x: "Sep", y: 84 },
-      { x: "Oct", y: 94 },
-      { x: "Nov", y: 74 },
-      { x: "Dec", y: 62 },
-    ],
-  };
-}
+    return {
+      received: [
+        { x: "1月", y: 0 },
+        { x: "2月", y: 20 },
+        { x: "3月", y: 35 },
+        { x: "4月", y: 45 },
+        { x: "5月", y: 35 },
+        { x: "6月", y: 55 },
+        { x: "7月", y: 65 },
+        { x: "8月", y: 50 },
+        { x: "9月", y: 65 },
+        { x: "10月", y: 75 },
+        { x: "11月", y: 60 },
+        { x: "12月", y: 75 },
+      ],
+      due: [
+        { x: "1月", y: 15 },
+        { x: "2月", y: 9 },
+        { x: "3月", y: 17 },
+        { x: "4月", y: 32 },
+        { x: "5月", y: 25 },
+        { x: "6月", y: 68 },
+        { x: "7月", y: 80 },
+        { x: "8月", y: 68 },
+        { x: "9月", y: 84 },
+        { x: "10月", y: 94 },
+        { x: "11月", y: 74 },
+        { x: "12月", y: 62 },
+      ],
+    };
+  }
 
 export async function getWeeksProfitData(timeFrame?: string) {
   // Fake delay
@@ -101,44 +101,44 @@ export async function getWeeksProfitData(timeFrame?: string) {
   if (timeFrame === "last week") {
     return {
       sales: [
-        { x: "Sat", y: 33 },
-        { x: "Sun", y: 44 },
-        { x: "Mon", y: 31 },
-        { x: "Tue", y: 57 },
-        { x: "Wed", y: 12 },
-        { x: "Thu", y: 33 },
-        { x: "Fri", y: 55 },
+        { x: "周六", y: 33 },
+        { x: "周日", y: 44 },
+        { x: "周一", y: 31 },
+        { x: "周二", y: 57 },
+        { x: "周三", y: 12 },
+        { x: "周四", y: 33 },
+        { x: "周五", y: 55 },
       ],
       revenue: [
-        { x: "Sat", y: 10 },
-        { x: "Sun", y: 20 },
-        { x: "Mon", y: 17 },
-        { x: "Tue", y: 7 },
-        { x: "Wed", y: 10 },
-        { x: "Thu", y: 23 },
-        { x: "Fri", y: 13 },
+        { x: "周六", y: 10 },
+        { x: "周日", y: 20 },
+        { x: "周一", y: 17 },
+        { x: "周二", y: 7 },
+        { x: "周三", y: 10 },
+        { x: "周四", y: 23 },
+        { x: "周五", y: 13 },
       ],
     };
   }
 
   return {
     sales: [
-      { x: "Sat", y: 44 },
-      { x: "Sun", y: 55 },
-      { x: "Mon", y: 41 },
-      { x: "Tue", y: 67 },
-      { x: "Wed", y: 22 },
-      { x: "Thu", y: 43 },
-      { x: "Fri", y: 65 },
+      { x: "周六", y: 44 },
+      { x: "周日", y: 55 },
+      { x: "周一", y: 41 },
+      { x: "周二", y: 67 },
+      { x: "周三", y: 22 },
+      { x: "周四", y: 43 },
+      { x: "周五", y: 65 },
     ],
     revenue: [
-      { x: "Sat", y: 13 },
-      { x: "Sun", y: 23 },
-      { x: "Mon", y: 20 },
-      { x: "Tue", y: 8 },
-      { x: "Wed", y: 13 },
-      { x: "Thu", y: 27 },
-      { x: "Fri", y: 15 },
+      { x: "周六", y: 13 },
+      { x: "周日", y: 23 },
+      { x: "周一", y: 20 },
+      { x: "周二", y: 8 },
+      { x: "周三", y: 13 },
+      { x: "周四", y: 27 },
+      { x: "周五", y: 15 },
     ],
   };
 }

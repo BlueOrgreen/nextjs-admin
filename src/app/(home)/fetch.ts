@@ -32,7 +32,7 @@ export async function getChatsData() {
       profile: "/images/user/user-01.png",
       isActive: true,
       lastMessage: {
-        content: "See you tomorrow at the meeting!",
+        content: "明天会议上见！",
         type: "text",
         timestamp: "2024-12-19T14:30:00Z",
         isRead: false,
@@ -44,7 +44,7 @@ export async function getChatsData() {
       profile: "/images/user/user-03.png",
       isActive: true,
       lastMessage: {
-        content: "Thanks for the update",
+        content: "感谢你的更新",
         type: "text",
         timestamp: "2024-12-19T10:15:00Z",
         isRead: true,
@@ -56,7 +56,7 @@ export async function getChatsData() {
       profile: "/images/user/user-04.png",
       isActive: false,
       lastMessage: {
-        content: "What's up?",
+        content: "最近怎么样？",
         type: "text",
         timestamp: "2024-12-19T10:15:00Z",
         isRead: true,
@@ -68,7 +68,7 @@ export async function getChatsData() {
       profile: "/images/user/user-05.png",
       isActive: false,
       lastMessage: {
-        content: "Where are you now?",
+        content: "你现在在哪里？",
         type: "text",
         timestamp: "2024-12-19T10:15:00Z",
         isRead: true,
@@ -80,7 +80,7 @@ export async function getChatsData() {
       profile: "/images/user/user-07.png",
       isActive: false,
       lastMessage: {
-        content: "Hey, how are you?",
+        content: "嗨，你最近还好吗？",
         type: "text",
         timestamp: "2024-12-19T10:15:00Z",
         isRead: true,

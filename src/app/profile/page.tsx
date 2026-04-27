@@ -39,13 +39,13 @@ export default function Page() {
 
   return (
     <div className="mx-auto w-full max-w-[970px]">
-      <Breadcrumb pageName="Profile" />
+      <Breadcrumb pageName="个人资料" />
 
       <div className="overflow-hidden rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
         <div className="relative z-20 h-35 md:h-65">
           <Image
             src={data?.coverPhoto}
-            alt="profile cover"
+            alt="个人资料封面"
             className="h-full w-full rounded-tl-[10px] rounded-tr-[10px] object-cover object-center"
             width={970}
             height={260}
@@ -70,7 +70,7 @@ export default function Page() {
 
               <CameraIcon />
 
-              <span>Edit</span>
+              <span>编辑</span>
             </label>
           </div>
         </div>
@@ -84,7 +84,7 @@ export default function Page() {
                     width={160}
                     height={160}
                     className="overflow-hidden rounded-full"
-                    alt="profile"
+                    alt="个人头像"
                   />
 
                   <label
@@ -110,38 +110,17 @@ export default function Page() {
             <h3 className="mb-1 text-heading-6 font-bold text-dark dark:text-white">
               {data?.name}
             </h3>
-            <p className="font-medium">Ui/Ux Designer</p>
-            <div className="mx-auto mb-5.5 mt-5 grid max-w-[370px] grid-cols-3 rounded-[5px] border border-stroke py-[9px] shadow-1 dark:border-dark-3 dark:bg-dark-2 dark:shadow-card">
-              <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-dark-3 xsm:flex-row">
-                <span className="font-medium text-dark dark:text-white">
-                  259
-                </span>
-                <span className="text-body-sm">Posts</span>
-              </div>
-              <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-dark-3 xsm:flex-row">
-                <span className="font-medium text-dark dark:text-white">
-                  129K
-                </span>
-                <span className="text-body-sm">Followers</span>
-              </div>
-              <div className="flex flex-col items-center justify-center gap-1 px-4 xsm:flex-row">
-                <span className="font-medium text-dark dark:text-white">
-                  2K
-                </span>
-                <span className="text-body-sm-sm">Following</span>
-              </div>
-            </div>
+            <p className="font-medium">全栈工程师</p>
 
             <div className="mx-auto max-w-[720px]">
               <h4 className="font-medium text-dark dark:text-white">
-                About Me
+                关于我
               </h4>
               <p className="mt-4">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Pellentesque posuere fermentum urna, eu condimentum mauris
-                tempus ut. Donec fermentum blandit aliquet. Etiam dictum dapibus
-                ultricies. Sed vel aliquet libero. Nunc a augue fermentum,
-                pharetra ligula sed, aliquam lacus.
+                我专注于产品界面设计与用户体验优化，擅长从业务目标出发，
+                将复杂的信息结构整理成清晰、易用且具有视觉层次的产品界面。
+                平时主要参与后台系统、数据看板和移动端产品的设计工作，也会
+                关注设计系统、交互细节以及团队协作效率的持续提升。
               </p>
             </div>
 

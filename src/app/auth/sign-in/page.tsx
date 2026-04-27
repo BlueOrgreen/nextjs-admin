@@ -5,13 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Sign in",
+  title: "登录",
 };
 
 export default function SignIn() {
   return (
     <>
-      <Breadcrumb pageName="Sign In" />
+      <Breadcrumb pageName="登录" />
 
       <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
         <div className="flex flex-wrap items-center">
@@ -27,35 +27,34 @@ export default function SignIn() {
                 <Image
                   className="hidden dark:block"
                   src={"/images/logo/logo.svg"}
-                  alt="Logo"
+                  alt="品牌标志"
                   width={176}
                   height={32}
                 />
                 <Image
                   className="dark:hidden"
                   src={"/images/logo/logo-dark.svg"}
-                  alt="Logo"
+                  alt="品牌标志"
                   width={176}
                   height={32}
                 />
               </Link>
               <p className="mb-3 text-xl font-medium text-dark dark:text-white">
-                Sign in to your account
+                登录你的账户
               </p>
 
               <h1 className="mb-4 text-2xl font-bold text-dark dark:text-white sm:text-heading-3">
-                Welcome Back!
+                欢迎回来
               </h1>
 
               <p className="w-full max-w-[375px] font-medium text-dark-4 dark:text-dark-6">
-                Please sign in to your account by completing the necessary
-                fields below
+                请填写下方必要信息，登录你的账户
               </p>
 
               <div className="mt-31">
                 <Image
                   src={"/images/grids/grid-02.svg"}
-                  alt="Logo"
+                  alt="装饰插图"
                   width={405}
                   height={325}
                   className="mx-auto dark:opacity-30"

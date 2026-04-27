@@ -14,6 +14,12 @@ type PropsType<TItem> = {
 };
 
 const PARAM_KEY = "selected_time_frame";
+const PERIOD_LABELS: Record<string, string> = {
+  monthly: "每月",
+  yearly: "每年",
+  "this week": "本周",
+  "last week": "上周",
+};
 
 export function PeriodPicker<TItem extends string>({
   defaultValue,
@@ -36,7 +42,7 @@ export function PeriodPicker<TItem extends string>({
             "border-none bg-transparent p-0 text-dark dark:bg-transparent dark:text-white",
         )}
       >
-        <span className="capitalize">{defaultValue || "Time Period"}</span>
+        <span>{getPeriodLabel(defaultValue)}</span>
 
         <ChevronUpIcon className="size-4 rotate-180 transition-transform" />
       </DropdownTrigger>
@@ -64,7 +70,7 @@ export function PeriodPicker<TItem extends string>({
                   setIsOpen(false);
                 }}
               >
-                {item}
+                {getPeriodLabel(item)}
               </button>
             </li>
           ))}
@@ -96,3 +102,11 @@ const createQueryString = (props: {
 
   return `?${PARAM_KEY}=${newSearchParams},${paramsValue}`;
 };
+
+function getPeriodLabel(value?: string) {
+  if (!value) {
+    return "时间范围";
+  }
+
+  return PERIOD_LABELS[value] ?? value;
+}
