@@ -5,6 +5,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import InputGroup from "../FormElements/InputGroup";
 import { Checkbox } from "../FormElements/checkbox";
+import { useRouter } from "next/navigation";
 
 export default function SigninWithPassword() {
   const [data, setData] = useState({
@@ -12,6 +13,7 @@ export default function SigninWithPassword() {
     password: process.env.NEXT_PUBLIC_DEMO_USER_PASS || "",
     remember: false,
   });
+  const router = useRouter();
   const [error, setError] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -31,11 +33,15 @@ export default function SigninWithPassword() {
     setError("");
 
     const result = await login(data.email, data.password, data.remember);
-
+    console.log("yunfan===result====>", result);
+    
+    
     setLoading(false);
 
     if (!result.success && result.error) {
       setError(result.error);
+    } else {
+      router.push("/");
     }
   };
 

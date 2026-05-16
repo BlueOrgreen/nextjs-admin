@@ -1,6 +1,19 @@
 import * as Icons from "../icons";
 
-export const NAV_DATA = [
+interface NavItem {
+  title: string;
+  url?: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  hidden?: boolean;
+  items?: NavItem[];
+}
+
+interface NavSection {
+  label: string;
+  items: NavItem[];
+}
+
+export const NAV_DATA: NavSection[] = [
   {
     label: "主菜单",
     items: [
@@ -9,7 +22,7 @@ export const NAV_DATA = [
         icon: Icons.HomeIcon,
         items: [
           {
-            title: "电商概览",
+            title: "数据看版",
             url: "/",
           },
         ],
@@ -29,6 +42,7 @@ export const NAV_DATA = [
       {
         title: "表单",
         icon: Icons.Alphabet,
+        hidden: true,
         items: [
           {
             title: "表单元素",
@@ -41,19 +55,9 @@ export const NAV_DATA = [
         ],
       },
       {
-        title: "表格",
-        url: "/tables",
-        icon: Icons.Table,
-        items: [
-          {
-            title: "表格列表",
-            url: "/tables",
-          },
-        ],
-      },
-      {
         title: "页面",
         icon: Icons.Alphabet,
+        hidden: true,
         items: [
           {
             title: "设置",
@@ -61,10 +65,20 @@ export const NAV_DATA = [
           },
         ],
       },
+      {
+        title: "订单管理",
+        icon: Icons.Alphabet,
+        items: [
+          {
+            title: "订单",
+            url: "/orders",
+          },
+        ],
+      },
     ],
   },
   {
-    label: "其他",
+    label: "系统元素",
     items: [
       {
         title: "图表",
@@ -73,6 +87,18 @@ export const NAV_DATA = [
           {
             title: "基础图表",
             url: "/charts/basic-chart",
+          },
+        ],
+      },
+      {
+        title: "表格",
+        url: "/tables",
+        icon: Icons.Table,
+        // hidden: true,
+        items: [
+          {
+            title: "表格列表",
+            url: "/tables",
           },
         ],
       },
@@ -93,6 +119,7 @@ export const NAV_DATA = [
       {
         title: "身份认证",
         icon: Icons.Authentication,
+        hidden: true,
         items: [
           {
             title: "登录",

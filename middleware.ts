@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyJWT } from "./src/lib/auth/jwt";
-import { AUTH_COOKIE_NAME } from "./src/lib/auth/cookies";
+import { AUTH_COOKIE_NAME } from "./src/lib/auth/client-cookies";
 
 // Routes to skip (static assets, API routes, etc.)
 const PUBLIC_PATHS = ["/_next", "/api", "/favicon.ico", "/images"];

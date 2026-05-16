@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, createContext, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { login as authLogin } from "@/lib/auth/auth";
-import { setAuthCookie, deleteAuthCookie, getAuthCookie } from "@/lib/auth/cookies";
+import { getAuthCookie, AUTH_COOKIE_NAME } from "@/lib/auth/client-cookies";
 import { decodeJWTWithoutVerify, type JWTPayload } from "@/lib/auth/jwt";
 
 export interface User {
@@ -35,7 +35,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Initialize user from cookie on mount
   useEffect(() => {
     const token = getAuthCookie();
     if (token) {
@@ -52,14 +51,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (email: string, password: string, remember: boolean): Promise<{ success: boolean; error?: string }> => {
       try {
         const response = await authLogin({ email, password });
-
-        if (response.code !== 200 || !response.data.access_token) {
+        // console.log("response===yunfna====>", response);
+        
+        if (response.code !== 0 || !response.data.access_token) {
           return { success: false, error: response.message || "Login failed" };
         }
 
-        await setAuthCookie(response.data.access_token, remember);
+        // Set cookie via cookie string (client-side)
+        const maxAge = remember ? 60 * 60 * 24 * 7 : undefined;
+        const expires = remember ? `; expires=${new Date(Date.now() + maxAge * 1000).toUTCString()}` : "";
+        document.cookie = `${AUTH_COOKIE_NAME}=${response.data.access_token}; path=/; max-age=${maxAge ?? ""}${expires} SameSite=Lax`;
 
         const payload = decodeJWTWithoutVerify(response.data.access_token);
+        
         if (payload) {
           const user = parseUserFromToken(payload);
           if (user) setUser(user);
@@ -75,7 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const logout = useCallback(() => {
-    deleteAuthCookie();
+    document.cookie = `${AUTH_COOKIE_NAME}=; path=/; max-age=0`;
     setUser(null);
     router.push("/auth/sign-in");
   }, [router]);
