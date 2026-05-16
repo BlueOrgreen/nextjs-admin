@@ -18,9 +18,9 @@ export function UserInfo() {
   const { user, logout } = useAuth();
 
   const displayUser = {
-    name: user?.name ?? "Guest",
+    name: user?.email?.split('@')[0] ?? "Guest",
     email: user?.email ?? "",
-    img: user?.img ?? "/images/user/user-03.png",
+    img: "/images/user/user-03.png",
   };
 
   return (
