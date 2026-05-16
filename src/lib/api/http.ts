@@ -1,5 +1,11 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
 
+export type ApiEnvelope<T> = {
+  code: number;
+  data: T;
+  message: string;
+};
+
 export type ApiRequestConfig = AxiosRequestConfig;
 
 export function createApiClient(baseURL: string): AxiosInstance {
