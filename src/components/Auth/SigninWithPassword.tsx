@@ -1,5 +1,6 @@
 "use client";
 import { EmailIcon, PasswordIcon } from "@/assets/icons";
+import { useAuth } from "@/contexts/auth-context";
 import Link from "next/link";
 import React, { useState } from "react";
 import InputGroup from "../FormElements/InputGroup";
@@ -11,8 +12,10 @@ export default function SigninWithPassword() {
     password: process.env.NEXT_PUBLIC_DEMO_USER_PASS || "",
     remember: false,
   });
+  const [error, setError] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({
@@ -21,15 +24,19 @@ export default function SigninWithPassword() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // You can remove this code block
     setLoading(true);
+    setError("");
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    const result = await login(data.email, data.password, data.remember);
+
+    setLoading(false);
+
+    if (!result.success && result.error) {
+      setError(result.error);
+    }
   };
 
   return (
@@ -80,6 +87,11 @@ export default function SigninWithPassword() {
       </div>
 
       <div className="mb-4.5">
+        {error && (
+          <div className="mb-4 rounded-lg bg-red-500/10 p-3 text-sm text-red-500 dark:bg-red-500/20">
+            {error}
+          </div>
+        )}
         <button
           type="submit"
           className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary p-4 font-medium text-white transition hover:bg-opacity-90"
