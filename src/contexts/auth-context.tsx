@@ -12,6 +12,15 @@ export interface User {
   role: string;
 }
 
+function parseUserFromToken(payload: JWTPayload): User | null {
+  if (!payload.sub) return null;
+  return {
+    userId: payload.sub,
+    email: payload.email,
+    role: payload.role,
+  };
+}
+
 interface AuthContextValue {
   user: User | null;
   isLoading: boolean;
@@ -32,11 +41,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (token) {
       const payload = decodeJWTWithoutVerify(token);
       if (payload) {
-        setUser({
-          userId: payload.sub,
-          email: payload.email,
-          role: payload.role,
-        });
+        const user = parseUserFromToken(payload);
+        if (user) setUser(user);
       }
     }
     setIsLoading(false);
@@ -55,16 +61,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         const payload = decodeJWTWithoutVerify(response.data.access_token);
         if (payload) {
-          setUser({
-            userId: payload.sub,
-            email: payload.email,
-            role: payload.role,
-          });
+          const user = parseUserFromToken(payload);
+          if (user) setUser(user);
         }
 
         return { success: true };
       } catch (err) {
-        return { success: false, error: "Network error" };
+        const message = err instanceof Error ? err.message : "Unknown error";
+        return { success: false, error: `Network error: ${message}` };
       }
     },
     [],
