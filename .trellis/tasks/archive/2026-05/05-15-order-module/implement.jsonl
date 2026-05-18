@@ -1,0 +1,5 @@
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend layer entry and checklist"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "App router and module layout conventions"}
+{"file": ".trellis/spec/frontend/hook-guidelines.md", "reason": "React Query and custom hook patterns"}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "UI component composition"}
+{"file": ".trellis/spec/guides/index.md", "reason": "Cross-cutting implementation guides"}
