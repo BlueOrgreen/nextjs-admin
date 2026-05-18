@@ -9,13 +9,34 @@ export type ApiEnvelope<T> = {
 export type ApiRequestConfig = AxiosRequestConfig;
 
 export function createApiClient(baseURL: string): AxiosInstance {
-  return axios.create({
+  const client = axios.create({
     baseURL,
     timeout: 15000,
     headers: {
       "Content-Type": "application/json",
     },
   });
+
+  // Add Bearer token from cookie to all requests
+  client.interceptors.request.use((config) => {
+    if (typeof document === "undefined") {
+      return config;
+    }
+    const cookieArr = document.cookie.split("; ");
+    for (const cookie of cookieArr) {
+      const [name, ...rest] = cookie.split("=");
+      if (name.trim() === "access_token") {
+        const token = rest.join("=");
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        break;
+      }
+    }
+    return config;
+  });
+
+  return client;
 }
 
 export function buildPath<TParams extends object>(

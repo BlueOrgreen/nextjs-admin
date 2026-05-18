@@ -51,16 +51,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (email: string, password: string, remember: boolean): Promise<{ success: boolean; error?: string }> => {
       try {
         const response = await authLogin({ email, password });
-        // console.log("response===yunfna====>", response);
         
         if (response.code !== 0 || !response.data.access_token) {
           return { success: false, error: response.message || "Login failed" };
         }
 
         // Set cookie via cookie string (client-side)
-        const maxAge = remember ? 60 * 60 * 24 * 7 : undefined;
+        const maxAge = remember ? 60 * 60 * 24 * 7 : 0;
         const expires = remember ? `; expires=${new Date(Date.now() + maxAge * 1000).toUTCString()}` : "";
-        document.cookie = `${AUTH_COOKIE_NAME}=${response.data.access_token}; path=/; max-age=${maxAge ?? ""}${expires} SameSite=Lax`;
+        document.cookie = `${AUTH_COOKIE_NAME}=${response.data.access_token}; path=/; max-age=${maxAge}${expires} SameSite=Lax`;
 
         const payload = decodeJWTWithoutVerify(response.data.access_token);
         
