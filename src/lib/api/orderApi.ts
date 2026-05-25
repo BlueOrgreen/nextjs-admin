@@ -4,11 +4,51 @@
  * Generated at: 2026-04-27T08:59:00.642Z
  */
 
+import { ApiEnvelope } from "./http";
 import { createApiClient, buildPath, mergeQueryConfig, type ApiRequestConfig } from "./http";
 
 export const orderApiClient = createApiClient(
-  process.env.NEXT_PUBLIC_ORDER_API_BASE_URL ?? "http://localhost:3002",
+  process.env.NEXT_PUBLIC_ORDER_API_BASE_URL ?? "http://localhost:3010",
 );
+
+// Products 目前没有通过 gateway 暴露成稳定可用的路径，仍然直连 order-service。
+export const orderServiceApiClient = createApiClient(
+  process.env.NEXT_PUBLIC_ORDER_SERVICE_BASE_URL ?? "http://localhost:3002",
+);
+
+
+
+export type OrderStatus =
+  | "pending"
+  | "paid"
+  | "shipped"
+  | "completed"
+  | "cancelled";
+
+export type HealthCheckItem = {
+  status: string;
+  [key: string]: unknown;
+};
+
+export type HealthCheckPayload = {
+  status: string;
+  info?: Record<string, HealthCheckItem> | null;
+  error?: Record<string, HealthCheckItem> | null;
+  details?: Record<string, HealthCheckItem>;
+};
+
+export type OrderRecord = {
+  id: string;
+  userId: string;
+  productId: string;
+  productName: string;
+  quantity: number;
+  description: string;
+  amount: string;
+  status: OrderStatus;
+  createdAt: string;
+};
+
 
 export type CreateOrderDto = {
   userId: string;
@@ -17,47 +57,17 @@ export type CreateOrderDto = {
   description?: string;
 };
 
-export type CreateProductDto = Record<string, never>;
+export type GetHealthResponse = ApiEnvelope<HealthCheckPayload>;
 
-export type UpdateOrderDto = {
-  description?: string;
-  amount?: number;
-  status?: "pending" | "paid" | "shipped" | "completed" | "cancelled";
-};
+export type GetOrdersResponse = ApiEnvelope<OrderRecord[]>;
 
-export type UpdateProductDto = Record<string, never>;
-
-export type GetHealthResponse = {
-  status?: string;
-  info?: {
-    [key: string]: {
-      status: string;
-      [key: string]: unknown;
-    };
-  } | null;
-  error?: {
-    [key: string]: {
-      status: string;
-      [key: string]: unknown;
-    };
-  } | null;
-  details?: {
-    [key: string]: {
-      status: string;
-      [key: string]: unknown;
-    };
-  };
-};
-
-export type GetOrdersResponse = unknown;
-
-export type CreateOrdersResponse = unknown;
+export type CreateOrdersResponse = ApiEnvelope<OrderRecord>;
 
 export interface GetOrdersUserByUserIdPathParams {
   userId: string;
 }
 
-export type GetOrdersUserByUserIdResponse = unknown;
+export type GetOrdersUserByUserIdResponse = ApiEnvelope<OrderRecord[]>;
 
 export interface GetOrdersDemoDirtyReadQueryParams {
   productId: string;
@@ -122,17 +132,13 @@ export interface GetOrdersByIdPathParams {
   id: string;
 }
 
-export type GetOrdersByIdResponse = unknown;
+export type GetOrdersByIdResponse = ApiEnvelope<OrderRecord>;
 
 export interface UpdateOrdersByIdPathParams {
   id: string;
 }
 
-export type UpdateOrdersByIdResponse = unknown;
-
-export type GetProductsResponse = unknown;
-
-export type CreateProductsResponse = unknown;
+export type UpdateOrdersByIdResponse = ApiEnvelope<OrderRecord>;
 
 export interface DeleteProductsByIdPathParams {
   id: string;
@@ -144,19 +150,23 @@ export interface GetProductsByIdPathParams {
   id: string;
 }
 
-export type GetProductsByIdResponse = unknown;
-
 export interface UpdateProductsByIdPathParams {
   id: string;
 }
 
-export type UpdateProductsByIdResponse = unknown;
+export type UpdateOrderDto = {
+  description?: string;
+  amount?: number;
+  status?: OrderStatus;
+};
+
+export type { GetProductsResponse, ProductRecord } from "./productApi";
 
 export async function getHealth(
   config?: ApiRequestConfig,
 ): Promise<GetHealthResponse> {
   const response = await orderApiClient.get<GetHealthResponse>(
-    "/health",
+    "/health/order",
     config,
   );
 
@@ -170,7 +180,7 @@ export async function getOrders(
   config?: ApiRequestConfig,
 ): Promise<GetOrdersResponse> {
   const response = await orderApiClient.get<GetOrdersResponse>(
-    "/orders",
+    "/api/orders",
     config,
   );
 
@@ -185,7 +195,7 @@ export async function createOrders(
   config?: ApiRequestConfig,
 ): Promise<CreateOrdersResponse> {
   const response = await orderApiClient.post<CreateOrdersResponse>(
-    "/orders",
+    "/api/orders",
     data,
     config,
   );
@@ -201,7 +211,7 @@ export async function getOrdersUserByUserId(
   config?: ApiRequestConfig,
 ): Promise<GetOrdersUserByUserIdResponse> {
   const response = await orderApiClient.get<GetOrdersUserByUserIdResponse>(
-    buildPath("/orders/user/{userId}", pathParams),
+    buildPath("/api/orders/user/{userId}", pathParams),
     config,
   );
 
@@ -216,7 +226,7 @@ export async function getOrdersDemoDirtyRead(
   config?: ApiRequestConfig,
 ): Promise<GetOrdersDemoDirtyReadResponse> {
   const response = await orderApiClient.get<GetOrdersDemoDirtyReadResponse>(
-    "/orders/demo/dirty-read",
+    "/api/orders/demo/dirty-read",
     mergeQueryConfig(query, config),
   );
 
@@ -231,7 +241,7 @@ export async function createOrdersDemoSimulateDirtyWrite(
   config?: ApiRequestConfig,
 ): Promise<CreateOrdersDemoSimulateDirtyWriteResponse> {
   const response = await orderApiClient.post<CreateOrdersDemoSimulateDirtyWriteResponse>(
-    "/orders/demo/simulate-dirty-write",
+    "/api/orders/demo/simulate-dirty-write",
     data,
     config,
   );
@@ -247,7 +257,7 @@ export async function getOrdersDemoNonRepeatableRead(
   config?: ApiRequestConfig,
 ): Promise<GetOrdersDemoNonRepeatableReadResponse> {
   const response = await orderApiClient.get<GetOrdersDemoNonRepeatableReadResponse>(
-    "/orders/demo/non-repeatable-read",
+    "/api/orders/demo/non-repeatable-read",
     mergeQueryConfig(query, config),
   );
 
@@ -262,7 +272,7 @@ export async function getOrdersDemoPhantomRead(
   config?: ApiRequestConfig,
 ): Promise<GetOrdersDemoPhantomReadResponse> {
   const response = await orderApiClient.get<GetOrdersDemoPhantomReadResponse>(
-    "/orders/demo/phantom-read",
+    "/api/orders/demo/phantom-read",
     mergeQueryConfig(query, config),
   );
 
@@ -276,7 +286,7 @@ export async function getOrdersDemoIsolationLevel(
   config?: ApiRequestConfig,
 ): Promise<GetOrdersDemoIsolationLevelResponse> {
   const response = await orderApiClient.get<GetOrdersDemoIsolationLevelResponse>(
-    "/orders/demo/isolation-level",
+    "/api/orders/demo/isolation-level",
     config,
   );
 
@@ -291,7 +301,7 @@ export async function getOrdersDemoIsolationLevelRead(
   config?: ApiRequestConfig,
 ): Promise<GetOrdersDemoIsolationLevelReadResponse> {
   const response = await orderApiClient.get<GetOrdersDemoIsolationLevelReadResponse>(
-    "/orders/demo/isolation-level/read",
+    "/api/orders/demo/isolation-level/read",
     mergeQueryConfig(query, config),
   );
 
@@ -306,7 +316,7 @@ export async function getOrdersDemoLockShared(
   config?: ApiRequestConfig,
 ): Promise<GetOrdersDemoLockSharedResponse> {
   const response = await orderApiClient.get<GetOrdersDemoLockSharedResponse>(
-    "/orders/demo/lock/shared",
+    "/api/orders/demo/lock/shared",
     mergeQueryConfig(query, config),
   );
 
@@ -321,7 +331,7 @@ export async function getOrdersDemoLockExclusive(
   config?: ApiRequestConfig,
 ): Promise<GetOrdersDemoLockExclusiveResponse> {
   const response = await orderApiClient.get<GetOrdersDemoLockExclusiveResponse>(
-    "/orders/demo/lock/exclusive",
+    "/api/orders/demo/lock/exclusive",
     mergeQueryConfig(query, config),
   );
 
@@ -336,7 +346,7 @@ export async function createOrdersDemoLockDeadlock(
   config?: ApiRequestConfig,
 ): Promise<CreateOrdersDemoLockDeadlockResponse> {
   const response = await orderApiClient.post<CreateOrdersDemoLockDeadlockResponse>(
-    "/orders/demo/lock/deadlock",
+    "/api/orders/demo/lock/deadlock",
     data,
     config,
   );
@@ -352,7 +362,7 @@ export async function deleteOrdersById(
   config?: ApiRequestConfig,
 ): Promise<DeleteOrdersByIdResponse> {
   const response = await orderApiClient.delete<DeleteOrdersByIdResponse>(
-    buildPath("/orders/{id}", pathParams),
+    buildPath("/api/orders/{id}", pathParams),
     config,
   );
 
@@ -367,7 +377,7 @@ export async function getOrdersById(
   config?: ApiRequestConfig,
 ): Promise<GetOrdersByIdResponse> {
   const response = await orderApiClient.get<GetOrdersByIdResponse>(
-    buildPath("/orders/{id}", pathParams),
+    buildPath("/api/orders/{id}", pathParams),
     config,
   );
 
@@ -383,7 +393,7 @@ export async function updateOrdersById(
   config?: ApiRequestConfig,
 ): Promise<UpdateOrdersByIdResponse> {
   const response = await orderApiClient.patch<UpdateOrdersByIdResponse>(
-    buildPath("/orders/{id}", pathParams),
+    buildPath("/api/orders/{id}", pathParams),
     data,
     config,
   );
@@ -391,64 +401,3 @@ export async function updateOrdersById(
   return response.data;
 }
 
-export async function getProducts(
-  config?: ApiRequestConfig,
-): Promise<GetProductsResponse> {
-  const response = await orderApiClient.get<GetProductsResponse>(
-    "/products",
-    config,
-  );
-
-  return response.data;
-}
-
-export async function createProducts(
-  data: CreateProductDto,
-  config?: ApiRequestConfig,
-): Promise<CreateProductsResponse> {
-  const response = await orderApiClient.post<CreateProductsResponse>(
-    "/products",
-    data,
-    config,
-  );
-
-  return response.data;
-}
-
-export async function deleteProductsById(
-  pathParams: DeleteProductsByIdPathParams,
-  config?: ApiRequestConfig,
-): Promise<DeleteProductsByIdResponse> {
-  const response = await orderApiClient.delete<DeleteProductsByIdResponse>(
-    buildPath("/products/{id}", pathParams),
-    config,
-  );
-
-  return response.data;
-}
-
-export async function getProductsById(
-  pathParams: GetProductsByIdPathParams,
-  config?: ApiRequestConfig,
-): Promise<GetProductsByIdResponse> {
-  const response = await orderApiClient.get<GetProductsByIdResponse>(
-    buildPath("/products/{id}", pathParams),
-    config,
-  );
-
-  return response.data;
-}
-
-export async function updateProductsById(
-  pathParams: UpdateProductsByIdPathParams,
-  data: UpdateProductDto,
-  config?: ApiRequestConfig,
-): Promise<UpdateProductsByIdResponse> {
-  const response = await orderApiClient.patch<UpdateProductsByIdResponse>(
-    buildPath("/products/{id}", pathParams),
-    data,
-    config,
-  );
-
-  return response.data;
-}
