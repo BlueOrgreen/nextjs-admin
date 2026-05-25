@@ -14,7 +14,13 @@ export const CONTACT_ACCOUNTS = [
   },
 ] as const;
 
-export type WorkLinkKind = "blog" | "npm";
+export type WorkLinkKind = "blog" | "github";
+
+export type WorkSecondaryLink = {
+  label: string;
+  href: string;
+  type: "site" | "npm";
+};
 
 export type WorkLink = {
   id: string;
@@ -22,28 +28,50 @@ export type WorkLink = {
   description: string;
   href: string;
   kind: WorkLinkKind;
+  secondaryLinks?: readonly WorkSecondaryLink[];
 };
 
 export const WORK_LINKS: readonly WorkLink[] = [
   {
     id: "blog",
     title: "个人技术博客",
-    description: "www.blog.chenchar.com",
-    href: "https://www.blog.chenchar.com/",
+    description: "BlueOrgreen/yunfan-website",
+    href: "https://github.com/BlueOrgreen/yunfan-website",
     kind: "blog",
+    secondaryLinks: [
+      {
+        type: "site",
+        label: "访问线上站点 www.blog.chenchar.com",
+        href: "https://www.blog.chenchar.com/",
+      },
+    ],
   },
   {
-    id: "fe-runtime",
+    id: "fan-mf-lib",
     title: "微前端运行时工具库",
-    description: "@fan-scripts/fe-runtime",
-    href: "https://www.npmjs.com/package/@fan-scripts/fe-runtime",
-    kind: "npm",
+    description: "BlueOrgreen/fan-mf-lib",
+    href: "https://github.com/BlueOrgreen/fan-mf-lib",
+    kind: "github",
+    secondaryLinks: [
+      {
+        type: "npm",
+        label: "npm · @fan-scripts/fe-runtime",
+        href: "https://www.npmjs.com/package/@fan-scripts/fe-runtime",
+      },
+    ],
   },
   {
-    id: "dev-scripts",
-    title: "npm 工具库",
-    description: "@fan-scripts/dev-scripts",
-    href: "https://www.npmjs.com/package/@fan-scripts/dev-scripts",
-    kind: "npm",
+    id: "fan-scripts",
+    title: "monorepo 发包工具库",
+    description: "BlueOrgreen/fan-scripts",
+    href: "https://github.com/BlueOrgreen/fan-scripts",
+    kind: "github",
+    secondaryLinks: [
+      {
+        type: "npm",
+        label: "npm · @fan-scripts/dev-scripts",
+        href: "https://www.npmjs.com/package/@fan-scripts/dev-scripts",
+      },
+    ],
   },
 ];

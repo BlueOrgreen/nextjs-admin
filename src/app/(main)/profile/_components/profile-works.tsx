@@ -2,30 +2,62 @@ import { cn } from "@/lib/utils";
 import {
   ArrowUpRight,
   BookOpen,
+  Code2,
+  ExternalLink,
+  GitBranch,
   Layers,
   Package,
   type LucideIcon,
 } from "lucide-react";
-import type { WorkLink, WorkLinkKind } from "../_lib/profile-content";
+import type { WorkLink, WorkSecondaryLink } from "../_lib/profile-content";
 
-const WORK_ICON_CONFIG: Record<
-  WorkLinkKind,
-  { Icon: LucideIcon; iconClass: string; tileClass: string }
-> = {
-  blog: {
-    Icon: BookOpen,
-    iconClass: "text-primary",
-    tileClass: "bg-primary/10 ring-primary/20",
-  },
-  npm: {
-    Icon: Package,
-    iconClass: "text-[#CB3837]",
-    tileClass: "bg-[#CB3837]/10 ring-[#CB3837]/20",
-  },
+function SecondaryLinkIcon({ type }: { type: WorkSecondaryLink["type"] }) {
+  if (type === "npm") {
+    return <Package className="size-3.5 shrink-0 text-[#CB3837]" aria-hidden />;
+  }
+
+  return <ExternalLink className="size-3.5 shrink-0" aria-hidden />;
+}
+
+function WorkSecondaryLinks({
+  links,
+}: {
+  links: readonly WorkSecondaryLink[];
+}) {
+  return (
+    <div className="flex flex-col gap-1.5 border-t border-border/80 px-3 py-2">
+      {links.map((item) => (
+        <a
+          key={item.href}
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-primary"
+        >
+          <SecondaryLinkIcon type={item.type} />
+          {item.label}
+        </a>
+      ))}
+    </div>
+  );
+}
+
+type WorkIconConfig = {
+  Icon: LucideIcon;
+  iconClass: string;
+  tileClass: string;
 };
 
-function getWorkIcon(link: WorkLink) {
-  if (link.id === "fe-runtime") {
+function getWorkIcon(link: WorkLink): WorkIconConfig {
+  if (link.id === "blog") {
+    return {
+      Icon: BookOpen,
+      iconClass: "text-primary",
+      tileClass: "bg-primary/10 ring-primary/20",
+    };
+  }
+
+  if (link.id === "fan-mf-lib") {
     return {
       Icon: Layers,
       iconClass: "text-primary",
@@ -33,7 +65,7 @@ function getWorkIcon(link: WorkLink) {
     };
   }
 
-  if (link.id === "dev-scripts") {
+  if (link.id === "fan-scripts") {
     return {
       Icon: Package,
       iconClass: "text-amber-600 dark:text-amber-500",
@@ -41,7 +73,11 @@ function getWorkIcon(link: WorkLink) {
     };
   }
 
-  return WORK_ICON_CONFIG[link.kind];
+  return {
+    Icon: GitBranch,
+    iconClass: "text-foreground",
+    tileClass: "bg-muted ring-border",
+  };
 }
 
 type ProfileWorksProps = {
@@ -58,37 +94,45 @@ export function ProfileWorks({ links }: ProfileWorksProps) {
 
           return (
             <li key={link.id}>
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
+              <div
                 className={cn(
-                  "group flex items-center gap-3 rounded-lg border border-border bg-muted/30 px-3 py-3 transition-colors",
+                  "rounded-lg border border-border bg-muted/30 transition-colors",
                   "hover:border-primary/25 hover:bg-muted/50",
                 )}
               >
-                <span
-                  className={cn(
-                    "flex size-10 shrink-0 items-center justify-center rounded-lg ring-1",
-                    tileClass,
-                  )}
-                  aria-hidden
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-3 px-3 py-3"
                 >
-                  <Icon className={cn("size-[1.125rem]", iconClass)} />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-medium text-foreground group-hover:text-primary">
-                    {link.title}
+                  <span
+                    className={cn(
+                      "flex size-10 shrink-0 items-center justify-center rounded-lg ring-1",
+                      tileClass,
+                    )}
+                    aria-hidden
+                  >
+                    <Icon className={cn("size-[1.125rem]", iconClass)} />
                   </span>
-                  <span className="mt-0.5 block truncate font-mono text-xs text-muted-foreground">
-                    {link.description}
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-medium text-foreground group-hover:text-primary">
+                      {link.title}
+                    </span>
+                    <span className="mt-0.5 flex items-center gap-1.5 truncate font-mono text-xs text-muted-foreground">
+                      <Code2 className="size-3 shrink-0 opacity-70" aria-hidden />
+                      {link.description}
+                    </span>
                   </span>
-                </span>
-                <ArrowUpRight
-                  className="size-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:text-primary group-hover:opacity-100"
-                  aria-hidden
-                />
-              </a>
+                  <ArrowUpRight
+                    className="size-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:text-primary group-hover:opacity-100"
+                    aria-hidden
+                  />
+                </a>
+                {link.secondaryLinks?.length ? (
+                  <WorkSecondaryLinks links={link.secondaryLinks} />
+                ) : null}
+              </div>
             </li>
           );
         })}

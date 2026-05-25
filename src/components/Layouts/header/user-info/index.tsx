@@ -90,7 +90,7 @@ export function UserInfo() {
             <span className="mr-auto text-base font-medium">查看资料</span>
           </Link>
 
-          <Link
+          {/* <Link
             href={"/pages/settings"}
             onClick={() => setIsOpen(false)}
             className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[9px] hover:bg-gray-2 hover:text-dark dark:hover:bg-dark-3 dark:hover:text-white"
@@ -98,7 +98,7 @@ export function UserInfo() {
             <SettingsIcon />
 
             <span className="mr-auto text-base font-medium">账户设置</span>
-          </Link>
+          </Link> */}
         </div>
 
         <hr className="border-[#E8E8E8] dark:border-dark-3" />
