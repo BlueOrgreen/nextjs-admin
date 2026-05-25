@@ -39,3 +39,36 @@
 ### Next Steps
 
 - None - task complete
+
+
+## Session 2: 个人资料页优化与首页商品统计
+
+**Date**: 2026-05-25
+**Task**: 个人资料页优化与首页商品统计
+**Branch**: `main`
+
+### Summary
+
+个人资料页采用 shadcn 双栏布局，补充技术栈、联系方式复制与作品链接（博客、npm 包）；首页商品总数对接 GET /api/products/count；侧栏导航调整订单/商品入口。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `1491f33` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
