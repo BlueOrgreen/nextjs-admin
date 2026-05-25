@@ -27,6 +27,8 @@ export function createApiClient(baseURL: string): AxiosInstance {
       const [name, ...rest] = cookie.split("=");
       if (name.trim() === "access_token") {
         const token = rest.join("=");
+        console.log("yf====>token", token);
+
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -35,6 +37,18 @@ export function createApiClient(baseURL: string): AxiosInstance {
     }
     return config;
   });
+
+  // Handle 401 responses and redirect to login
+  client.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 401) {
+        document.cookie = "access_token=; path=/; max-age=0";
+        window.location.href = "/auth/sign-in";
+      }
+      return Promise.reject(error);
+    },
+  );
 
   return client;
 }

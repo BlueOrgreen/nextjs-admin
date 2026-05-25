@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useAuth } from "@/contexts/auth-context";
 import {
   useDeleteOrderMutation,
   useUpdateOrderMutation,
@@ -29,13 +31,13 @@ type OrderDetailViewProps = {
 
 export function OrderDetailView({ orderId }: OrderDetailViewProps) {
   const router = useRouter();
+  const { user } = useAuth();
   const orderQuery = useOrderQuery(orderId);
   const updateOrder = useUpdateOrderMutation();
   const deleteOrder = useDeleteOrderMutation();
   const [status, setStatus] = useState<OrderStatus>("pending");
   const [description, setDescription] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
-  const [actionMessage, setActionMessage] = useState<string | null>(null);
 
   const order = orderQuery.data?.order;
 
@@ -50,17 +52,16 @@ export function OrderDetailView({ orderId }: OrderDetailViewProps) {
 
   const handleSave = async () => {
     setFormError(null);
-    setActionMessage(null);
 
     try {
-      const response = await updateOrder.mutateAsync({
+      await updateOrder.mutateAsync({
         id: orderId,
         data: {
           status,
           description: description.trim() || undefined,
         },
       });
-      setActionMessage(response.message || "订单已更新。");
+      toast.success("订单修改成功");
     } catch (error) {
       setFormError(
         error instanceof Error ? error.message : "更新订单失败，请稍后重试。",
@@ -75,10 +76,10 @@ export function OrderDetailView({ orderId }: OrderDetailViewProps) {
     }
 
     setFormError(null);
-    setActionMessage(null);
 
     try {
       await deleteOrder.mutateAsync({ id: orderId });
+      toast.success("订单删除成功");
       router.push("/orders");
       router.refresh();
     } catch (error) {
@@ -121,15 +122,12 @@ export function OrderDetailView({ orderId }: OrderDetailViewProps) {
         <DetailHeader orderId={order.id} status={order.status} />
 
         <dl className="grid gap-0 divide-y divide-stroke px-6 dark:divide-dark-3">
-          <DetailRow label="用户 ID" value={order.userId} mono />
-          <DetailRow label="商品 ID" value={order.displayProductId} mono />
+          <DetailRow label="用户" value={order.userId === user?.userId ? (user?.name ?? order.userId) : order.userId} />
+          <DetailRow label="商品" value={order.productName || order.displayProductId} />
+          <DetailRow label="商品 ID" value={order.productId} mono />
           <DetailRow label="数量" value={String(order.quantity)} />
-          <DetailRow label="金额" value={formatAmount(order.amountValue)} />
+          <DetailRow label="金额" value={`¥${formatAmount(order.amountValue)}`} />
           <DetailRow label="创建时间" value={order.createdAtLabel} />
-          <DetailRow
-            label="接口消息"
-            value={orderQuery.data?.message ?? "-"}
-          />
         </dl>
 
         <form
@@ -178,12 +176,6 @@ export function OrderDetailView({ orderId }: OrderDetailViewProps) {
           {formError && (
             <p className="text-sm text-red-dark dark:text-red-light-2">
               {formError}
-            </p>
-          )}
-
-          {actionMessage && (
-            <p className="text-sm text-green-dark dark:text-green-light-3">
-              {actionMessage}
             </p>
           )}
 

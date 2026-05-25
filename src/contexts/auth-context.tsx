@@ -9,6 +9,7 @@ import { decodeJWTWithoutVerify, type JWTPayload } from "@/lib/auth/jwt";
 export interface User {
   userId: string;
   email: string;
+  name: string;
   role: string;
 }
 
@@ -17,6 +18,7 @@ function parseUserFromToken(payload: JWTPayload): User | null {
   return {
     userId: payload.sub,
     email: payload.email,
+    name: payload.name ?? payload.email.split("@")[0],
     role: payload.role,
   };
 }

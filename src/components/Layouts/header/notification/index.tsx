@@ -14,7 +14,7 @@ import { BellIcon } from "./icons";
 
 const notificationList = [
   {
-    image: "/images/user/user-15.png",
+    image: "/images/user/user-032.png",
     title: "Piter 已加入团队",
     subTitle: "快去欢迎他",
   },
@@ -24,20 +24,20 @@ const notificationList = [
     subTitle: "Devid 发来了一条新消息",
   },
   {
-    image: "/images/user/user-26.png",
+    image: "/images/user/user-031.png",
     title: "收到新付款",
     subTitle: "查看你的收益",
   },
-  {
-    image: "/images/user/user-28.png",
-    title: "Jolly 已完成任务",
-    subTitle: "给他分配新的任务",
-  },
-  {
-    image: "/images/user/user-27.png",
-    title: "Roman 已加入团队",
-    subTitle: "快去欢迎他",
-  },
+  // {
+  //   image: "/images/user/user-28.png",
+  //   title: "Jolly 已完成任务",
+  //   subTitle: "给他分配新的任务",
+  // },
+  // {
+  //   image: "/images/user/user-27.png",
+  //   title: "Roman 已加入团队",
+  //   subTitle: "快去欢迎他",
+  // },
 ];
 
 export function Notification() {

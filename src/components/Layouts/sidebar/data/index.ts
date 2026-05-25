@@ -73,6 +73,10 @@ export const NAV_DATA: NavSection[] = [
             title: "订单",
             url: "/orders",
           },
+          {
+            title: "商品",
+            url: "/products",
+          },
         ],
       },
     ],

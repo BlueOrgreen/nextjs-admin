@@ -331,10 +331,10 @@ export function OrdersListView() {
               <h2 className="text-lg font-bold text-dark dark:text-white">
                 列表摘要
               </h2>
-              <p className="mt-2 text-sm leading-6 text-dark-5 dark:text-dark-6">
+              {/* <p className="mt-2 text-sm leading-6 text-dark-5 dark:text-dark-6">
                 这一侧只保留当前页真正有用的数字，帮助你快速判断订单规模、
                 处理进度和筛选结果。
-              </p>
+              </p> */}
             </div>
 
             <dl className="divide-y divide-stroke dark:divide-dark-3">
@@ -369,13 +369,13 @@ export function OrdersListView() {
 
             <div className="border-t border-stroke px-6 py-5 dark:border-dark-3">
               <h3 className="text-sm font-semibold text-dark dark:text-white">
-                数据说明
+                说明
               </h3>
-              <div className="mt-3 space-y-2 text-sm leading-6 text-dark-5 dark:text-dark-6">
+              {/* <div className="mt-3 space-y-2 text-sm leading-6 text-dark-5 dark:text-dark-6">
                 <p>接口：GET /api/orders</p>
                 <p>响应包装：{`{ code, data: { data, meta }, message }`}</p>
                 <p>备注为空时，列表统一显示"无备注"</p>
-              </div>
+              </div> */}
             </div>
           </>
         )}

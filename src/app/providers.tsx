@@ -4,6 +4,7 @@ import { SidebarProvider } from "@/components/Layouts/sidebar/sidebar-context";
 import { AuthProvider } from "@/contexts/auth-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "sonner";
 import { useState } from "react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -27,6 +28,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <SidebarProvider>{children}</SidebarProvider>
         </AuthProvider>
       </ThemeProvider>
+      <Toaster position="top-center" />
     </QueryClientProvider>
   );
 }
