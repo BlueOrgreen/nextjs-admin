@@ -32,6 +32,10 @@ export type ProductsListPayload = {
 
 export type GetProductsResponse = ApiEnvelope<ProductsListPayload>;
 
+export type GetProductsCountResponse = ApiEnvelope<{
+  total: number;
+}>;
+
 export type CreateProductDto = {
   name: string;
   price: number;
@@ -48,6 +52,17 @@ export type UpdateProductDto = {
   description?: string | null;
 };
 
+
+export async function getProductsCount(
+  config?: ApiRequestConfig,
+): Promise<GetProductsCountResponse> {
+  const response = await productServiceApiClient.get<GetProductsCountResponse>(
+    "/api/products/count",
+    config,
+  );
+
+  return response.data;
+}
 
 export async function getProducts(
   config?: ApiRequestConfig,

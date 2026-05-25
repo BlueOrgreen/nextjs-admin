@@ -3,7 +3,7 @@ import type { PropsWithChildren } from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Profile Page",
+  title: "个人资料",
 };
 
 export default function Layout({ children }: PropsWithChildren) {

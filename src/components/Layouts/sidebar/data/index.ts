@@ -28,10 +28,18 @@ export const NAV_DATA: NavSection[] = [
         ],
       },
       {
-        title: "日历",
-        url: "/calendar",
-        icon: Icons.Calendar,
-        items: [],
+        title: "订单管理",
+        icon: Icons.Alphabet,
+        items: [
+          {
+            title: "订单",
+            url: "/orders",
+          },
+          {
+            title: "商品",
+            url: "/products",
+          },
+        ],
       },
       {
         title: "个人资料",
@@ -65,25 +73,17 @@ export const NAV_DATA: NavSection[] = [
           },
         ],
       },
-      {
-        title: "订单管理",
-        icon: Icons.Alphabet,
-        items: [
-          {
-            title: "订单",
-            url: "/orders",
-          },
-          {
-            title: "商品",
-            url: "/products",
-          },
-        ],
-      },
     ],
   },
   {
-    label: "系统元素",
+    label: "系统",
     items: [
+      {
+        title: "日历",
+        url: "/calendar",
+        icon: Icons.Calendar,
+        items: [],
+      },
       {
         title: "图表",
         icon: Icons.PieChart,
@@ -106,6 +106,7 @@ export const NAV_DATA: NavSection[] = [
           },
         ],
       },
+      
       {
         title: "界面元素",
         icon: Icons.FourCircle,

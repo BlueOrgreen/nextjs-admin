@@ -1,135 +1,87 @@
-"use client";
-
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import type { Metadata } from "next";
 import Image from "next/image";
-
-import { useState } from "react";
-import { CameraIcon } from "./_components/icons";
+import { ProfileWorks } from "./_components/profile-works";
+import { ProfileSkillStacks } from "./_components/skill-stack";
 import { SocialAccounts } from "./_components/social-accounts";
+import { CONTACT_ACCOUNTS, PROFILE, WORK_LINKS } from "./_lib/profile-content";
 
-export default function Page() {
-  const [data, setData] = useState({
-    name: "云帆",
-    profilePhoto: "/images/user/user-03.png",
-    coverPhoto: "/images/cover/cover-01.png",
-  });
+export const metadata: Metadata = {
+  title: "个人资料",
+};
 
-  const handleChange = (e: any) => {
-    if (e.target.name === "profilePhoto" ) {
-      const file = e.target?.files[0];
-
-      setData({
-        ...data,
-        profilePhoto: file && URL.createObjectURL(file),
-      });
-    } else if (e.target.name === "coverPhoto") {
-      const file = e.target?.files[0];
-
-      setData({
-        ...data,
-        coverPhoto: file && URL.createObjectURL(file),
-      });
-    } else {
-      setData({
-        ...data,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
-
+export default function ProfilePage() {
   return (
-    <div className="mx-auto w-full max-w-[970px]">
+    <div className="space-y-6">
       <Breadcrumb pageName="个人资料" />
 
-      <div className="overflow-hidden rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
-        <div className="relative z-20 h-35 md:h-65">
-          <Image
-            src={data?.coverPhoto}
-            alt="个人资料封面"
-            className="h-full w-full rounded-tl-[10px] rounded-tr-[10px] object-cover object-center"
-            width={970}
-            height={260}
-            style={{
-              width: "auto",
-              height: "auto",
-            }}
-          />
-          {/* <div className="absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4">
-            <label
-              htmlFor="cover"
-              className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary px-[15px] py-[5px] text-body-sm font-medium text-white hover:bg-opacity-90"
-            >
-              <input
-                type="file"
-                name="coverPhoto"
-                id="coverPhoto"
-                className="sr-only"
-                onChange={handleChange}
-                accept="image/png, image/jpg, image/jpeg"
-              />
-
-              <CameraIcon />
-
-              <span>编辑</span>
-            </label>
-          </div> */}
+      <Card className="gap-0 overflow-hidden p-0">
+        <div
+          className="relative h-36 sm:h-44 md:h-52"
+          aria-hidden
+        >
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,oklch(0.94_0.03_280)_0%,oklch(0.97_0.01_280)_45%,oklch(0.96_0.02_300)_100%)] dark:bg-[linear-gradient(135deg,oklch(0.28_0.04_280)_0%,oklch(0.22_0.02_280)_55%,oklch(0.24_0.03_300)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_100%_0%,oklch(0.55_0.12_280/0.18),transparent)]" />
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-card to-transparent" />
         </div>
-        <div className="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
-          <div className="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full  sm:h-44 sm:max-w-[176px] sm:p-3">
-            <div className="relative droshadow-p-2">
-              {data?.profilePhoto && (
-                <>
-                  <Image
-                    src={data?.profilePhoto}
-                    width={160}
-                    height={160}
-                    className="overflow-hidden rounded-full"
-                    alt="个人头像"
-                  />
 
-                  {/* <label
-                    htmlFor="profilePhoto"
-                    className="absolute bottom-0 right-0 flex size-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
-                  >
-                    <CameraIcon />
+        <CardContent className="px-5 pb-8 pt-0 sm:px-8">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:gap-6">
+            <div className="-mt-14 sm:-mt-16">
+              <div className="relative size-24 overflow-hidden rounded-full ring-4 ring-card shadow-md sm:size-28">
+                <Image
+                  src={PROFILE.avatar}
+                  alt={`${PROFILE.name} 的头像`}
+                  fill
+                  sizes="(max-width: 640px) 96px, 112px"
+                  className="object-cover object-center"
+                  priority
+                />
+              </div>
+            </div>
 
-                    <input
-                      type="file"
-                      name="profilePhoto"
-                      id="profilePhoto"
-                      className="sr-only"
-                      onChange={handleChange}
-                      accept="image/png, image/jpg, image/jpeg"
-                    />
-                  </label> */}
-                </>
-              )}
+            <div className="min-w-0 flex-1 space-y-2 sm:pb-1">
+              <div className="space-y-1">
+                <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-[1.75rem]">
+                  {PROFILE.name}
+                </h1>
+                <p className="text-sm text-muted-foreground">{PROFILE.role}</p>
+              </div>
+              <Badge variant="secondary" className="font-normal">
+                云帆后台 · 产品体验
+              </Badge>
             </div>
           </div>
-          <div className="mt-4">
-            <h3 className="mb-1 text-heading-6 font-bold text-dark dark:text-white">
-              {data?.name}
-            </h3>
-            <p className="font-medium">全栈工程师</p>
-              
-            <div className="mx-auto max-w-[720px]">
-              <h4 className="font-medium text-dark dark:text-white">
+
+          <Separator className="my-7 sm:my-8" />
+
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_min(100%,280px)] lg:gap-10">
+            <section aria-labelledby="about-heading" className="space-y-4">
+              <h2
+                id="about-heading"
+                className="text-sm font-medium text-foreground"
+              >
                 关于我
-              </h4>
-              <p className="mt-4">
-                专注于产品界面设计与用户体验优化，擅长从业务目标出发，将复杂的信息结构整理成清晰、易用且具有视觉层次的产品界面。参与过中后台系统、数据看板、小程序、网页开发等项目的工作，关注系统、交互细节以及团队协作效率的持续提升
-                <br />
-                <br />
-                前端技术栈：React、Nextjs、TailwindCSS、Zustand
-                <br />
-                后端技术栈：Nestjs、Mysql、Linux、Typeorm
+              </h2>
+              <p className="max-w-prose text-sm leading-7 text-muted-foreground">
+                {PROFILE.bio}
               </p>
-            </div>
+              <ProfileWorks links={WORK_LINKS} />
+            </section>
 
-            <SocialAccounts />
+            <aside className="space-y-8 lg:border-l lg:border-border lg:pl-10">
+              <ProfileSkillStacks
+                frontend={PROFILE.frontendStack}
+                backend={PROFILE.backendStack}
+              />
+              <SocialAccounts accounts={CONTACT_ACCOUNTS} />
+            </aside>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

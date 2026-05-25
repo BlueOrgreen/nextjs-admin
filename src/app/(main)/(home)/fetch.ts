@@ -1,6 +1,39 @@
+import { getProductsCount } from "@/lib/api/productApi";
+import { cookies } from "next/headers";
+
+const ACCESS_TOKEN_COOKIE = "access_token";
+
+async function fetchProductsTotal(): Promise<number> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN_COOKIE)?.value;
+
+    const response = await getProductsCount(
+      token
+        ? {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        : undefined,
+    );
+    console.log("yf====>response", response);
+    
+    if (response.code !== 0) {
+      return 0;
+    }
+
+    return response.data?.total ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
 export async function getOverviewData() {
-  // Fake delay
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  const [productsTotal] = await Promise.all([
+    fetchProductsTotal(),
+    new Promise<void>((resolve) => setTimeout(resolve, 2000)),
+  ]);
 
   return {
     views: {
@@ -12,8 +45,8 @@ export async function getOverviewData() {
       growthRate: 4.35,
     },
     products: {
-      value: 3456,
-      growthRate: 2.59,
+      value: productsTotal,
+      growthRate: 0,
     },
     users: {
       value: 3456,
