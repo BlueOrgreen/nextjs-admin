@@ -15,7 +15,7 @@ import { BellIcon } from "./icons";
 const notificationList = [
   {
     image: "/images/user/user-032.png",
-    title: "Piter 已加入团队",
+    title: "小明 已加入团队",
     subTitle: "快去欢迎他",
   },
   {

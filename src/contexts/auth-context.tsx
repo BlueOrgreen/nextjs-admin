@@ -39,14 +39,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const persistSession = useCallback(async (token: string, remember: boolean) => {
-    const res = await fetch("/api/auth/session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "same-origin",
-      body: JSON.stringify({ access_token: token, remember }),
-    });
-    if (!res.ok) {
-      throw new Error("Failed to persist session cookie");
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 10_000);
+
+    try {
+      const res = await fetch("/api/auth/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        signal: controller.signal,
+        body: JSON.stringify({ access_token: token, remember }),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to persist session cookie");
+      }
+    } finally {
+      window.clearTimeout(timeoutId);
     }
   }, []);
 

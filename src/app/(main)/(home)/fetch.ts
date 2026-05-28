@@ -55,8 +55,8 @@ export async function getOverviewData() {
 export async function getChatsData() {
   return [
     {
-      name: "Jacob Jones",
-      profile: "/images/user/user-01.png",
+      name: "小明",
+      profile: "/images/user/user-032.png",
       isActive: true,
       lastMessage: {
         content: "明天会议上见！",
@@ -67,7 +67,7 @@ export async function getChatsData() {
       unreadCount: 3,
     },
     {
-      name: "Wilium Smith",
+      name: "yunfan",
       profile: "/images/user/user-03.png",
       isActive: true,
       lastMessage: {
@@ -79,8 +79,8 @@ export async function getChatsData() {
       unreadCount: 0,
     },
     {
-      name: "Johurul Haque",
-      profile: "/images/user/user-04.png",
+      name: "晓东",
+      profile: "/images/user/user-032.png",
       isActive: false,
       lastMessage: {
         content: "最近怎么样？",
@@ -91,8 +91,8 @@ export async function getChatsData() {
       unreadCount: 0,
     },
     {
-      name: "M. Chowdhury",
-      profile: "/images/user/user-05.png",
+      name: "阿特",
+      profile: "/images/user/user-031.png",
       isActive: false,
       lastMessage: {
         content: "你现在在哪里？",
@@ -101,18 +101,6 @@ export async function getChatsData() {
         isRead: true,
       },
       unreadCount: 2,
-    },
-    {
-      name: "Akagami",
-      profile: "/images/user/user-07.png",
-      isActive: false,
-      lastMessage: {
-        content: "嗨，你最近还好吗？",
-        type: "text",
-        timestamp: "2024-12-19T10:15:00Z",
-        isRead: true,
-      },
-      unreadCount: 0,
     },
   ];
 }

@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import InputGroup from "../FormElements/InputGroup";
 import { Checkbox } from "../FormElements/checkbox";
 import { useRouter } from "next/navigation";
+import { getPostLoginPath, navigateAfterLogin } from "@/lib/auth/navigate-after-login";
 
 export default function SigninWithPassword() {
   const [data, setData] = useState({
@@ -40,8 +41,8 @@ export default function SigninWithPassword() {
       return;
     }
 
-    // Navigate immediately; keep loading UI until the page unmounts.
-    router.replace("/");
+    // Soft navigate first; full page load fallback if App Router stalls.
+    navigateAfterLogin(router, getPostLoginPath());
   };
 
   return (
