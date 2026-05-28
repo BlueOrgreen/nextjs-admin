@@ -36,30 +36,42 @@ export async function middleware(request: NextRequest) {
   }
 
   const token = request.cookies.get(AUTH_COOKIE_NAME)?.value;
+  const tokenOk = token ? isTokenLikelyValid(token) : false;
+  const debugValue = `v2 token=${token ? "present" : "missing"} ok=${tokenOk} path=${pathname}`;
 
   // Auth routes: allow access, but redirect if already logged in
   if (pathname.startsWith("/auth")) {
-    if (token && isTokenLikelyValid(token)) {
+    if (token && tokenOk) {
       // Already logged in, redirect to home
-      return NextResponse.redirect(new URL("/", request.url));
+      const res = NextResponse.redirect(new URL("/", request.url));
+      res.headers.set("x-auth-mw", debugValue);
+      return res;
     }
-    return NextResponse.next();
+    const res = NextResponse.next();
+    res.headers.set("x-auth-mw", debugValue);
+    return res;
   }
 
   // Protected routes: require valid token
   if (!token) {
     const redirectUrl = new URL("/auth/sign-in", request.url);
     redirectUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(redirectUrl);
+    const res = NextResponse.redirect(redirectUrl);
+    res.headers.set("x-auth-mw", debugValue);
+    return res;
   }
 
-  if (!isTokenLikelyValid(token)) {
+  if (!tokenOk) {
     const redirectUrl = new URL("/auth/sign-in", request.url);
     redirectUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(redirectUrl);
+    const res = NextResponse.redirect(redirectUrl);
+    res.headers.set("x-auth-mw", debugValue);
+    return res;
   }
 
-  return NextResponse.next();
+  const res = NextResponse.next();
+  res.headers.set("x-auth-mw", debugValue);
+  return res;
 }
 
 export const config = {
