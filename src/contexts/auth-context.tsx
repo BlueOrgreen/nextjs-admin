@@ -38,6 +38,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  const setAuthCookie = useCallback((token: string, remember: boolean) => {
+    // Session cookie by default; persistent cookie when remember=true
+    const parts: string[] = [`${AUTH_COOKIE_NAME}=${token}`, "path=/", "SameSite=Lax"];
+
+    // Only set Secure on https to avoid breaking local http dev.
+    if (typeof window !== "undefined" && window.location.protocol === "https:") {
+      parts.push("Secure");
+    }
+
+    if (remember) {
+      const maxAge = 60 * 60 * 24 * 7; // 7 days
+      parts.push(`Max-Age=${maxAge}`);
+      parts.push(`Expires=${new Date(Date.now() + maxAge * 1000).toUTCString()}`);
+    }
+
+    document.cookie = parts.join("; ");
+  }, []);
+
   useEffect(() => {
     const token = getAuthCookie();
     if (token) {
@@ -59,10 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           return { success: false, error: response.message || "Login failed" };
         }
 
-        // Set cookie via cookie string (client-side)
-        const maxAge = remember ? 60 * 60 * 24 * 7 : 0;
-        const expires = remember ? `; expires=${new Date(Date.now() + maxAge * 1000).toUTCString()}` : "";
-        document.cookie = `${AUTH_COOKIE_NAME}=${response.data.access_token}; path=/; max-age=${maxAge}${expires} SameSite=Lax`;
+        setAuthCookie(response.data.access_token, remember);
 
         const payload = decodeJWTWithoutVerify(response.data.access_token);
         
@@ -109,7 +124,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { success: false, error: `请求异常：${message}` };
       }
     },
-    [],
+    [setAuthCookie],
   );
 
   const logout = useCallback(() => {
