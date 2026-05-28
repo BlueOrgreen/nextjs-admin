@@ -1,10 +1,31 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { verifyJWT } from "./src/lib/auth/jwt";
 import { AUTH_COOKIE_NAME } from "./src/lib/auth/client-cookies";
 
 // Routes to skip (static assets, API routes, etc.)
 const PUBLIC_PATHS = ["/_next", "/api", "/favicon.ico", "/images"];
+
+function decodeJwtPayload(token: string): null | { exp?: number } {
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    const base64Url = parts[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=");
+    const json = atob(padded);
+    return JSON.parse(json) as { exp?: number };
+  } catch {
+    return null;
+  }
+}
+
+function isTokenLikelyValid(token: string): boolean {
+  const payload = decodeJwtPayload(token);
+  if (!payload) return false;
+  if (!payload.exp) return true; // no exp claim, treat as present
+  const now = Math.floor(Date.now() / 1000);
+  return payload.exp > now;
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -18,12 +39,9 @@ export async function middleware(request: NextRequest) {
 
   // Auth routes: allow access, but redirect if already logged in
   if (pathname.startsWith("/auth")) {
-    if (token) {
-      const payload = await verifyJWT(token);
-      if (payload) {
-        // Already logged in, redirect to home
-        return NextResponse.redirect(new URL("/", request.url));
-      }
+    if (token && isTokenLikelyValid(token)) {
+      // Already logged in, redirect to home
+      return NextResponse.redirect(new URL("/", request.url));
     }
     return NextResponse.next();
   }
@@ -35,8 +53,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  const payload = await verifyJWT(token);
-  if (!payload) {
+  if (!isTokenLikelyValid(token)) {
     const redirectUrl = new URL("/auth/sign-in", request.url);
     redirectUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(redirectUrl);
