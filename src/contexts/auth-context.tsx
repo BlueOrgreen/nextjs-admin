@@ -38,22 +38,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const setAuthCookie = useCallback((token: string, remember: boolean) => {
-    // Session cookie by default; persistent cookie when remember=true
-    const parts: string[] = [`${AUTH_COOKIE_NAME}=${token}`, "path=/", "SameSite=Lax"];
-
-    // Only set Secure on https to avoid breaking local http dev.
-    if (typeof window !== "undefined" && window.location.protocol === "https:") {
-      parts.push("Secure");
+  const persistSession = useCallback(async (token: string, remember: boolean) => {
+    const res = await fetch("/api/auth/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ access_token: token, remember }),
+    });
+    if (!res.ok) {
+      throw new Error("Failed to persist session cookie");
     }
-
-    if (remember) {
-      const maxAge = 60 * 60 * 24 * 7; // 7 days
-      parts.push(`Max-Age=${maxAge}`);
-      parts.push(`Expires=${new Date(Date.now() + maxAge * 1000).toUTCString()}`);
-    }
-
-    document.cookie = parts.join("; ");
   }, []);
 
   useEffect(() => {
@@ -77,7 +71,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           return { success: false, error: response.message || "Login failed" };
         }
 
-        setAuthCookie(response.data.access_token, remember);
+        try {
+          await persistSession(response.data.access_token, remember);
+        } catch {
+          return { success: false, error: "登录成功但无法保存会话，请刷新后重试" };
+        }
 
         const payload = decodeJWTWithoutVerify(response.data.access_token);
         
@@ -124,10 +122,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { success: false, error: `请求异常：${message}` };
       }
     },
-    [setAuthCookie],
+    [persistSession],
   );
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    try {
+      await fetch("/api/auth/session", { method: "DELETE", credentials: "same-origin" });
+    } catch {
+      // ignore
+    }
     document.cookie = `${AUTH_COOKIE_NAME}=; path=/; max-age=0`;
     setUser(null);
     router.push("/auth/sign-in");

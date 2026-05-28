@@ -1,6 +1,8 @@
 "use client";
 
-export const AUTH_COOKIE_NAME = "access_token";
+import { AUTH_COOKIE_NAME } from "@/lib/auth/constants";
+
+export { AUTH_COOKIE_NAME };
 
 export function getAuthCookie(): string | null {
   if (typeof document === "undefined") {
