@@ -1,92 +1,178 @@
-# NextAdmin - Next.js Admin Dashboard Template and Components
+# web-nest — 全栈管理后台前端
 
-**NextAdmin** is a Free, open-source Next.js admin dashboard toolkit featuring 200+ UI components and templates that come with pre-built elements, components, pages, high-quality design, integrations, and much more to help you create powerful admin dashboards with ease.
+基于 **Next.js 16** 的管理端 Web 应用，与后端 Monorepo [`my-firstnest`](../my-firstnest) 配套使用：网关统一鉴权，前端负责登录、仪表盘、商品、订单等业务页面展示与交互。
 
+| 环境 | 地址 |
+|------|------|
+| 管理端（生产） | https://www.admin.chenchar.com |
+| API 网关（生产） | https://api.chenchar.com |
+| 本地开发 | http://localhost:3000 |
 
-[![nextjs admin template](https://cdn.pimjo.com/nextadmin-2.png)](https://nextadmin.co/)
+---
 
+## 项目定位
 
-**NextAdmin** provides you with a diverse set of dashboard UI components, elements, examples and pages necessary for creating top-notch admin panels or dashboards with **powerful** features and integrations. Whether you are working on a complex web application or a basic website, **NextAdmin** has got you covered.
+`web-nest` 是整套全栈方案中的 **B 端管理界面**，不直接连接 MySQL，所有业务数据通过 **HTTP API** 访问后端网关，由网关转发至 `user-service` / `order-service`。
 
-### [✨ Visit Website](https://nextadmin.co/)
-### [🚀 Live Demo](https://demo.nextadmin.co/)
-### [📖 Docs](https://docs.nextadmin.co/)
+典型能力包括：
 
-By leveraging the latest features of **Next.js 14** and key functionalities like **server-side rendering (SSR)**, **static site generation (SSG)**, and seamless **API route integration**, **NextAdmin** ensures optimal performance. With the added benefits of **React 18 advancements** and **TypeScript** reliability, **NextAdmin** is the ultimate choice to kickstart your **Next.js** project efficiently.
+- 邮箱密码登录（JWT）
+- 路由级鉴权（未登录跳转登录页）
+- 首页仪表盘（概览、图表、渠道数据）
+- 商品管理、订单列表与详情
+- 个人资料、通知、侧边栏导航等
 
-## Installation
+后端架构、微服务拆分与部署说明见仓库 [`my-firstnest`](../my-firstnest)。
 
-1. Download/fork/clone the repo and Once you're in the correct directory, it's time to install all the necessary dependencies. You can do this by typing the following command:
+---
 
+## 技术栈
+
+| 类别 | 技术 |
+|------|------|
+| 框架 | Next.js 16（App Router） |
+| UI | React 19、Tailwind CSS、shadcn/ui |
+| 请求 | Axios、TanStack React Query |
+| 图表 | ApexCharts、ECharts |
+| 认证 | Cookie + Middleware；API 使用 Bearer JWT |
+| 语言 | TypeScript |
+| 部署 | Docker standalone（由 `my-firstnest/docker-compose` 构建） |
+
+---
+
+## 目录结构（节选）
+
+```text
+src/
+├── app/
+│   ├── (auth)/auth/sign-in/     # 登录页
+│   ├── (main)/                    # 需登录的后台布局
+│   │   ├── (home)/                # 仪表盘
+│   │   ├── products/              # 商品
+│   │   ├── orders/                # 订单
+│   │   └── profile/               # 个人资料
+│   └── api/auth/session/          # 写入登录 Cookie（Route Handler）
+├── components/                    # 布局、表单、表格、图表等
+├── contexts/auth-context.tsx      # 登录态与用户信息
+├── lib/
+│   ├── auth/                      # JWT、Cookie、登录跳转
+│   └── api/                       # Axios 封装与业务 API
+└── middleware.ts                  # 路由守卫
 ```
+
+---
+
+## 认证流程
+
+```text
+用户提交登录
+  → POST {API}/auth/login（网关签发 access_token）
+  → POST /api/auth/session（Next 服务端 Set-Cookie）
+  → router 跳转首页 /
+  → middleware 读取 cookie 校验 token 有效期
+  → 业务请求由 Axios 自动附加 Authorization: Bearer <token>
+```
+
+要点：
+
+- **页面鉴权**依赖 Cookie（`access_token`），由 `/api/auth/session` 写入，供 Middleware 与部分 Server Component 使用。
+- **调用后端 API**使用 Bearer Token，与网关 `JWT_SECRET` 保持一致（生产环境在 compose 中注入 `web-nest` 的 `JWT_SECRET`）。
+- 登录成功后若客户端软导航卡住，会使用 **整页跳转兜底**（见 `src/lib/auth/navigate-after-login.ts`）。
+
+---
+
+## 环境变量
+
+本地开发可复制并创建 `.env.local`：
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3010
+NEXT_PUBLIC_ORDER_API_BASE_URL=http://localhost:3010
+NEXT_PUBLIC_ORDER_SERVICE_BASE_URL=http://localhost:3010
+NEXT_PUBLIC_USER_API_BASE_URL=http://localhost:3010
+
+# 可选：预填演示账号
+NEXT_PUBLIC_DEMO_USER_MAIL=yunfan@example.com
+NEXT_PUBLIC_DEMO_USER_PASS=你的密码
+```
+
+生产构建时 `NEXT_PUBLIC_*` 会在 **Docker build 阶段**写入客户端 bundle，示例见 `.env.production.example`。
+
+服务端运行时需要（与网关一致）：
+
+```env
+JWT_SECRET=my-firstnest-secret-2026
+```
+
+---
+
+## 本地开发
+
+**前置条件**：后端 `my-firstnest` 已启动（网关默认 `http://localhost:3010`）。
+
+```bash
 npm install
-```
-If you're using **Yarn** as your package manager, the command will be:
-
-```
-yarn install
-```
-
-2. Okay, you're almost there. Now all you need to do is start the development server. If you're using **npm**, the command is:
-
-```
 npm run dev
 ```
-And if you're using **Yarn**, it's:
 
+浏览器访问：http://localhost:3000
+
+---
+
+## 构建与生产部署
+
+通常不单独部署本仓库，而是作为 `my-firstnest` 的兄弟目录，由根目录 `docker-compose.yml` 构建：
+
+```bash
+# 在 my-firstnest 目录
+WEB_NEST_PATH=../web-nest docker compose up -d --build web-nest
 ```
-yarn dev
-```
 
-And voila! You're now ready to start developing. **Happy coding**!
+Nginx 将 `www.admin.chenchar.com` 反代至 `web-nest:3000`，API 域名 `api.chenchar.com` 指向网关。
 
-## Highlighted Features
-**200+ Next.js Dashboard Ul Components and Templates** - includes a variety of prebuilt **Ul elements, components, pages, and examples** crafted with a high-quality design.
-Additionally, features seamless **essential integrations and extensive functionalities**.
+更完整的上线步骤（SSL、双库、数据导入）见 `docs/deploy/tencent-lighthouse.md`。
 
-- A library of over **200** professional dashboard UI components and elements.
-- Five distinctive dashboard variations, catering to diverse use-cases.
-- A comprehensive set of essential dashboard and admin pages.
-- More than **45** **Next.js** files, ready for use.
-- Styling facilitated by **Tailwind CSS** files.
-- A design that resonates premium quality and high aesthetics.
-- A handy UI kit with assets.
-- Over ten web apps complete with examples.
-- Support for both **dark mode** and **light mode**.
-- Essential integrations including - Authentication (**NextAuth**), Database (**Postgres** with **Prisma**), and Search (**Algolia**).
-- Detailed and user-friendly documentation.
-- Customizable plugins and add-ons.
-- **TypeScript** compatibility.
-- Plus, much more!
+---
 
-All these features and more make **NextAdmin** a robust, well-rounded solution for all your dashboard development needs.
+## 主要页面路由
 
-## Update Logs
+| 路由 | 说明 |
+|------|------|
+| `/auth/sign-in` | 登录（公开） |
+| `/` | 仪表盘 |
+| `/products` | 商品管理 |
+| `/orders` | 订单列表 |
+| `/orders/[id]` | 订单详情 |
+| `/profile` | 个人资料 |
 
-### Version 1.2.3 - [Mar 16, 2026]
-- Update Next.js to ^16.1.6 and configure image qualities
+---
 
-### Version 1.2.2 - [December 01, 2025]
-- Updated to Next.js 16
-- Updated dependencies.
+## 与后端的 API 约定
 
-### Version 1.2.1 - [Mar 20, 2025]
-- Fix Peer dependency issues and NextConfig warning.
-- Updated apexcharts and react-apexhcarts to the latest version.
+- 统一响应：`{ code: number, data: T, message: string }`，`code === 0` 表示成功。
+- 登录：`POST /auth/login`，body `{ email, password }`。
+- 商品 / 订单等：经网关前缀 `/api/products`、`/api/orders` 等转发（详见后端 `proxy-routes.config.ts`）。
 
-### Version 1.2.0 - Major Upgrade and UI Improvements - [Jan 27, 2025]
+---
 
-- Upgraded to Next.js v15 and updated dependencies
-- API integration with loading skeleton for tables and charts.
-- Improved code structure for better readability.
-- Rebuilt components like dropdown, sidebar, and all ui-elements using accessibility practices.
-- Using search-params to store dropdown selection and refetch data.
-- Semantic markups, better separation of concerns and more.
+## 脚本
 
-### Version 1.1.0
-- Updated Dependencies
-- Removed Unused Integrations
-- Optimized App
+| 命令 | 说明 |
+|------|------|
+| `npm run dev` | 本地开发 |
+| `npm run build` | 生产构建 |
+| `npm run start` | 运行构建产物 |
+| `npm run lint` | ESLint |
+| `npm run generate:api` | 从 Swagger 生成 API 客户端（可选） |
 
-### Version 1.0
-- Initial Release - [May 13, 2024]
+---
+
+## 相关仓库
+
+- **后端**：[`my-firstnest`](../my-firstnest) — NestJS 网关 + user-service + order-service + Docker / Nginx 编排
+
+---
+
+## License
+
+Private / 按项目实际情况补充许可证说明。
