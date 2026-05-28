@@ -33,16 +33,15 @@ export default function SigninWithPassword() {
     setError("");
 
     const result = await login(data.email, data.password, data.remember);
-    console.log("yunfan===result====>", result);
-    
-    
-    setLoading(false);
 
-    if (!result.success && result.error) {
-      setError(result.error);
-    } else {
-      router.replace("/");
+    if (!result.success) {
+      setLoading(false);
+      if (result.error) setError(result.error);
+      return;
     }
+
+    // Navigate immediately; keep loading UI until the page unmounts.
+    router.replace("/");
   };
 
   return (

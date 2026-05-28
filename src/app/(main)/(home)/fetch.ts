@@ -30,10 +30,7 @@ async function fetchProductsTotal(): Promise<number> {
 }
 
 export async function getOverviewData() {
-  const [productsTotal] = await Promise.all([
-    fetchProductsTotal(),
-    new Promise<void>((resolve) => setTimeout(resolve, 2000)),
-  ]);
+  const productsTotal = await fetchProductsTotal();
 
   return {
     views: {
@@ -56,9 +53,6 @@ export async function getOverviewData() {
 }
 
 export async function getChatsData() {
-  // Fake delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
   return [
     {
       name: "Jacob Jones",
