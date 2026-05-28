@@ -86,6 +86,7 @@ export default function SigninWithPassword() {
 
         <Link
           href="/auth/forgot-password"
+          prefetch={false}
           className="hover:text-primary dark:text-white dark:hover:text-primary"
         >
           忘记密码?

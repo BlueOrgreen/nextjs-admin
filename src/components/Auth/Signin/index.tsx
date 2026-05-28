@@ -22,7 +22,7 @@ export default function Signin() {
       <div className="mt-6 text-center">
         <p>
           还没有账号？{" "}
-          <Link href="/auth/sign-up" className="text-primary">
+          <Link href="/auth/sign-up" prefetch={false} className="text-primary">
             立即注册
           </Link>
         </p>

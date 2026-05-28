@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, createContext, useContext } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import { login as authLogin } from "@/lib/auth/auth";
 import { getAuthCookie, AUTH_COOKIE_NAME } from "@/lib/auth/client-cookies";
 import { decodeJWTWithoutVerify, type JWTPayload } from "@/lib/auth/jwt";
@@ -72,8 +73,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         return { success: true };
       } catch (err) {
+        // Axios error: surface backend message if present
+        if (axios.isAxiosError(err)) {
+          const status = err.response?.status;
+          const data = err.response?.data as unknown;
+
+          // Common NestJS error shapes:
+          // - { message: string | string[]; error: string; statusCode: number }
+          // - { code: number; message: string; data?: any } (our ApiEnvelope-like)
+          const backendMessage =
+            (typeof data === "object" &&
+              data !== null &&
+              "message" in data &&
+              (typeof (data as any).message === "string"
+                ? (data as any).message
+                : Array.isArray((data as any).message)
+                  ? (data as any).message.join(", ")
+                  : undefined)) ||
+            undefined;
+
+          if (status === 401) {
+            return {
+              success: false,
+              error: backendMessage || "登录失败：账号或密码错误，或数据库尚未初始化。",
+            };
+          }
+
+          return {
+            success: false,
+            error: backendMessage || `请求失败：${status ?? "未知状态码"}`,
+          };
+        }
+
         const message = err instanceof Error ? err.message : "Unknown error";
-        return { success: false, error: `Network error: ${message}` };
+        return { success: false, error: `请求异常：${message}` };
       }
     },
     [],
