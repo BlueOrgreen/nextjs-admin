@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.cursor
+.trellis
+docs
+*.md
+!README.md
+.env*
+!.env.production.example
