@@ -1,4 +1,4 @@
-import Link from "next/link";
+// import Link from "next/link";
 import GoogleSigninButton from "../GoogleSigninButton";
 import SigninWithPassword from "../SigninWithPassword";
 
@@ -19,6 +19,7 @@ export default function Signin() {
         <SigninWithPassword />
       </div>
 
+      {/* 注册功能暂未开放
       <div className="mt-6 text-center">
         <p>
           还没有账号？{" "}
@@ -27,6 +28,7 @@ export default function Signin() {
           </Link>
         </p>
       </div>
+      */}
     </>
   );
 }
