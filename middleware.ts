@@ -13,6 +13,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // 微信等平台域名验证文件（public/*.txt）
+  if (pathname.endsWith(".txt")) {
+    return NextResponse.next();
+  }
+
   const token = request.cookies.get(AUTH_COOKIE_NAME)?.value;
   const tokenOk = token ? isAccessTokenValid(token) : false;
 
